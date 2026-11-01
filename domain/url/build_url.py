@@ -78,7 +78,7 @@ def build_url(base_url, api_key, path, query=None):
     query = urlencode(query) if query is not None else ""
 
     disable_redirector = (
-        os.environ.get("REDIRECTION_DISABLE", "false").lower() == "true"
+        os.environ.get("REDIRECTION_DISABLE", "true").lower() == "true"
     )
 
     force_redirector = os.environ.get("REDIRECTION_FORCE", "false").lower() == "true"
