@@ -335,7 +335,7 @@ def create_template_project_confirm_callback_wrapper(
                 return build_error_response(url, e)
 
             configure_argo_cd_manifest_project(
-                configuration, url, access_token, space_id
+                configuration, url, access_token or api_key, space_id
             )
 
             response_text = [
