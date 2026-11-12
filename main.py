@@ -21,6 +21,7 @@ from domain.tools.cli.task_summary import get_task_summary_cli_callback
 from domain.tools.cli.variable_query_cli import variable_query_cli_callback
 from domain.tools.githubactions.project_dashboard import get_project_dashboard_callback
 from domain.tools.githubactions.projects.create_template_project import (
+    create_general_resources_callback,
     create_template_project_callback,
     create_template_project_confirm_callback_wrapper,
 )
@@ -28,6 +29,9 @@ from domain.tools.githubactions.release_what_changed import (
     release_what_changed_callback_wrapper,
 )
 from domain.tools.wrapper.certificates_query import answer_certificates_wrapper
+from domain.tools.wrapper.create_general_resources import (
+    create_general_resources_wrapper,
+)
 from domain.tools.wrapper.function_definition import (
     FunctionDefinitions,
     FunctionDefinition,
@@ -472,6 +476,32 @@ def build_tools(tool_query):
                 "runbook.tf",
                 "Runbook",
                 "runbookprompt.txt",
+            ),
+            FunctionDefinition(
+                create_general_resources_wrapper(
+                    tool_query,
+                    callback=create_general_resources_callback(
+                        lambda: (get_api_key(), get_octopus_api()),
+                        get_github_user(),
+                        None,
+                        azurite_connection_string,
+                        log_query,
+                        general_project_examples,
+                        "generalinstructions.txt",
+                        None,
+                        None,
+                        ollama_model=None,
+                    ),
+                    logging=log_query,
+                ),
+                callback=create_template_project_confirm_callback_wrapper(
+                    tool_query,
+                    get_github_user(),
+                    lambda: (get_api_key(), get_octopus_api()),
+                    log_query,
+                    None,
+                    None,
+                ),
             ),
             FunctionDefinition(
                 spinnaker_wrapper(
